@@ -21,27 +21,6 @@ const productRouting = (request, response) => {
 };
 
 const renderAddProductPage = (response) => {
-  response.setHeader("Content-Type", "text/html");
-  response.write("<html>");
-  response.write("<head><title>Shop - Add product</title></head>");
-  response.write("<body>");
-  response.write("<h1>Add product</h1>");
-  response.write("<form action='/product/add' method='POST'>");
-  response.write(
-    "<br /><label>Name<br /><input type='text' name='name'></label>"
-  );
-  response.write(
-    "<br /><label>Description<br /><input type='text' name='description'></label>"
-  );
-  response.write("<br /><button type='submit'>Add</button>");
-  response.write("</form>");
-  response.write(
-    "<nav><a href='/'>Home</a><br /><a href='/product/new'>Newest product</a><br /><a href='/logout'>Logout</a></nav>"
-  );
-  response.write("</body>");
-  response.write("</html>");
-
-  return response.end();
 };
 
 const renderNewProductPage = (response) => {

@@ -1,40 +1,28 @@
-/*
-  📦 Dependy the Importer  
-  Zaimportuj wszystkie wymagane moduły: path, express, body-parser, logger oraz routing.  
-*/
-const http = require("http");
+const path = require("path");
+const express = require("express");
+const bodyParser = require("body-parser");
+const logger = require("./utils/logger")
 const config = require("./config");
-const { requestRouting } = require("./routing/routing");
+const { productRouting } = require("./routing/product")
+const { logoutRouting } = require("./routing/logout")
+const { killRouting } = require("./routing/kill")
+const { homeRouting } = require("./routing/home")
+const { STATUS_CODE } = require("./constants/statusCode.js")
 
-const requestListener = (request, response) => {
-  requestRouting(request, response);
-};
-
-const server = http.createServer(requestListener);
-
-server.listen(config.PORT);
-
-/*
-  🏗 Structo the Builder  
-  Utwórz instancję aplikacji express i zapisz ją w stałej app.  
-*/
-/*
-  🏗 Structo the Builder  
-  Zarejestruj middleware body-parser do parsowania ciał formularzy. 
-*/
-/*
-  🏗 Structo the Builder  
-  Dodaj middleware logujący informacje o każdym przychodzącym żądaniu.  
-*/
-/*
-  🏗 Structo the Builder  
-  Zarejestruj middleware obsługujące poszczególne ścieżki.  
-*/
-/*
-  🏗 Structo the Builder  
-    Obsłuż stronę 404 – zwróć plik 404.html i zaloguj błąd.   
-*/
-/*
-  🏗 Structo the Builder  
-    Uruchom serwer i nasłuchuj na porcie z config.js.    
-*/
+const app = express();
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use((req, _res, next) => {
+    logger.getInfoLog(req.method, req.url);
+    next();
+});
+app.use("/product", productRouting);
+app.use("/logout", logoutRouting);
+app.use("/kill", killRouting);
+app.use("/", homeRouting);
+app.use((req, res) => {
+    res.status(STATUS_CODE.NOT_FOUND).sendFile(path.join(__dirname, "views", "404.html"));
+    logger.getErrorLog(`404 Not Found: ${req.method} ${req.url}`);
+});
+app.listen(config.PORT, () => {
+    console.log(`Server is running on port ${config.PORT}`);
+});
