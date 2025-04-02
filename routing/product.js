@@ -2,6 +2,7 @@ const fileSystem = require("fs");
 const path = require("path");
 const { STATUS_CODE } = require("../constants/statusCode");
 const renderNewProductPage = require('../views/renderNewProductPage');
+const express = require("express")
 
 const productRouting = express.Router();
 
